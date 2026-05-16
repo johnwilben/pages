@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interim Lab Exam: Serverless CSV Dashboard</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm;
+            @bottom-right {
+                content: "Page " counter(page) " of " counter(pages);
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 8pt;
+                color: #8c8c8c;
+            }
+            @bottom-left {
+                content: "Cloud Computing - Practical Exam";
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 8pt;
+                color: #8c8c8c;
+                font-weight: 500;
+            }
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Front Page Accent Header */
+        .header-banner {
+            margin: -20mm -15mm 25px -15mm;
+            padding: 25px 15mm;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #ffffff;
+        }
+        
+        .header-banner h1 {
+            font-size: 20pt;
+            margin: 0 0 8px 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .header-banner .subtitle {
+            font-size: 12pt;
+            margin: 0;
+            opacity: 0.9;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 14pt;
+            color: #1e3c72;
+            border-left: 4px solid #2a5298;
+            padding-left: 10px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            font-size: 11pt;
+            color: #2c3e50;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin: 0 0 12px 0;
+        }
+
+        /* Tables styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 9.5pt;
+            page-break-inside: avoid;
+        }
+
+        th {
+            background-color: #f1f4f9;
+            color: #1e3c72;
+            font-weight: 600;
+            text-align: left;
+            padding: 8px 10px;
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f8fafc;
+        }
+
+        /* Diagrams and Flowcharts */
+        .diagram-container {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            page-break-inside: avoid;
+        }
+
+        .diagram-step {
+            display: inline-block;
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 8px 15px;
+            font-weight: 500;
+            color: #1e3c72;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .diagram-arrow {
+            color: #64748b;
+            font-weight: bold;
+            margin: 5px 0;
+            font-size: 12pt;
+        }
+
+        /* Code & Pre blocks */
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f1f5f9;
+            color: #b91c1c;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 9pt;
+        }
+
+        pre {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin: 12px 0;
+            overflow: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 8.5pt;
+            line-height: 1.4;
+            page-break-inside: avoid;
+        }
+
+        /* Instructions list */
+        ol {
+            margin: 0 0 15px 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        li::marker {
+            color: #2a5298;
+            font-weight: bold;
+        }
+
+        ul {
+            margin: 5px 0 10px 0;
+            padding-left: 20px;
+            list-style-type: square;
+        }
+
+        ul li {
+            margin-bottom: 4px;
+        }
+
+        /* Callouts / Notes */
+        .callout {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            color: #78350f;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border-radius: 0 6px 6px 0;
+            page-break-inside: avoid;
+        }
+        
+        .callout.danger {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .meta-table th, .meta-table td {
+            padding: 6px 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-banner">
+        <h1>Interim Lab Exam: Serverless CSV Dashboard</h1>
+        <div class="subtitle">Cloud Computing &mdash; Practical Exam</div>
+    </div>
+
+    <h2>Exam Overview</h2>
+    <table class="meta-table">
+        <thead>
+            <tr>
+                <th style="width: 30%">Key Specification</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Duration</strong></td>
+                <td>1 hour and 30 minutes</td>
+            </tr>
+            <tr>
+                <td><strong>Type</strong></td>
+                <td>Practical / Hands-On System Deployment</td>
+            </tr>
+            <tr>
+                <td><strong>Platform</strong></td>
+                <td>Amazon Web Services (AWS S3 + Lambda)</td>
+            </tr>
+            <tr>
+                <td><strong>Region</strong></td>
+                <td><code>ap-southeast-1</code> (Singapore)</td>
+            </tr>
+            <tr>
+                <td><strong>Collaboration</strong></td>
+                <td>Strictly individual work only</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Learning Outcomes Assessed</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 8%">#</th>
+                <th style="width: 72%">Learning Outcome</th>
+                <th style="width: 20%">Bloom's Level</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Identify the components of a serverless application (S3, Lambda, IAM)</td>
+                <td>Remember</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Explain how S3 event notifications trigger Lambda functions</td>
+                <td>Understand</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Create and configure S3 buckets with static website hosting</td>
+                <td>Apply</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Deploy a Lambda function and configure S3 triggers</td>
+                <td>Apply</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Diagnose Lambda errors using CloudWatch Logs</td>
+                <td>Analyze</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Fix code and permission issues to complete a working serverless pipeline</td>
+                <td>Evaluate</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Apply the principle of least privilege when configuring IAM roles</td>
+                <td>Create</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Scenario</h2>
+    <p>You are building a <strong>Serverless Sales Dashboard</strong>. When a CSV file is uploaded to an S3 bucket, a Lambda function is automatically triggered to process the file and generate a consolidated JSON report. A static website hosted on S3 reads and displays the output data in real-time.</p>
+
+    <div class="diagram-container">
+        <div class="diagram-step">Upload <code>sales.csv</code> to S3 <code>"uploads/"</code></div>
+        <div class="diagram-arrow">&darr;</div>
+        <div class="diagram-step">S3 event notification triggers AWS Lambda</div>
+        <div class="diagram-arrow">&darr;</div>
+        <div class="diagram-step">Lambda reads CSV, calculates metrics, and writes <code>results.json</code> to <code>"data/"</code></div>
+        <div class="diagram-arrow">&darr;</div>
+        <div class="diagram-step">Static website updates and displays dashboard from <code>results.json</code></div>
+    </div>
+
+    <div class="callout">
+        <strong>System Integrity Alert:</strong> The base Lambda source code provided has exactly <strong>3 bugs</strong>. Your core assignment is to deploy the infrastructure pipeline, find the bugs using Amazon CloudWatch Logs, and successfully remediate them.
+    </div>
+
+    <h2>Step-by-Step Instructions</h2>
+
+    <h3>Step 1: Create S3 Bucket</h3>
+    <p>Construct a globally unique S3 bucket with the following exact specifications:</p>
+    <ul>
+        <li><strong>Name:</strong> <code>cldcomp-interim-&lt;yourlastname&gt;</code> (e.g., <code>cldcomp-interim-santos</code>)</li>
+        <li><strong>Region:</strong> <code>ap-southeast-1</code></li>
+        <li><strong>Public access:</strong> Allowed (Uncheck "Block <em>all</em> public access")</li>
+        <li><strong>Static website hosting:</strong> Enabled (Set Index document to <code>index.html</code>)</li>
+    </ul>
+
+    <h3>Step 2: Set Bucket Policy</h3>
+    <p>Apply a bucket policy allowing public read permissions across all contained objects. Navigate to Bucket &rarr; Permissions &rarr; Bucket policy &rarr; Edit, and inject the following snippet (ensuring you substitute <code>&lt;yourlastname&gt;</code>):</p>
+<pre>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::cldcomp-interim-&lt;yourlastname&gt;/*"
+    }
+  ]
+}</pre>
+
+    <h3>Step 3: Upload Website Source Files</h3>
+    <ol>
+        <li>Create two directories inside your bucket root: <code>uploads/</code> and <code>data/</code>.</li>
+        <li>Fetch the core webpage markup from: <code style="color:#f8fafc; background:#1e293b;">https://raw.githubusercontent.com/johnwilben/CLDCOMP/main/index.html</code></li>
+        <li>Open the file locally and swap out <code>[YOUR FULL NAME HERE]</code> with your actual full name.</li>
+        <li>Upload this modified <code>index.html</code> file directly into the root level of your bucket.</li>
+        <li>Test the setup by browsing to the S3 static URL. It should load correctly and display a "Loading data..." indicator.</li>
+    </ol>
+
+    <h3>Step 4: Create Lambda Function</h3>
+    <p>Provision a new Lambda environment configured as follows:</p>
+    <ul>
+        <li><strong>Name:</strong> <code>cldcomp-interim-&lt;yourlastname&gt;-processor</code></li>
+        <li><strong>Runtime:</strong> Python 3.12</li>
+        <li><strong>Architecture:</strong> x86_64</li>
+        <li><strong>Execution role:</strong> Choose "Create a new role with basic Lambda permissions".</li>
+    </ul>
+    <p>Pull the base processor code from: <code style="color:#f8fafc; background:#1e293b;">https://raw.githubusercontent.com/johnwilben/CLDCOMP/main/lambda_function.py</code>, replace the starter boilerplate inside the editor, and click <strong>Deploy</strong>.</p>
+
+    <h3>Step 5: Configure Lambda IAM Role Policy</h3>
+    <p>Your processing function requires custom permissions to access data items inside the S3 environment. Attach an inline policy:</p>
+    <ol>
+        <li>Inside the Lambda interface, open the <strong>Configuration</strong> tab &rarr; <strong>Permissions</strong>.</li>
+        <li>Click the active <strong>Role name</strong> link to navigate to the IAM Identity Management dashboard.</li>
+        <li>Select <strong>Add permissions</strong> &rarr; <strong>Create inline policy</strong> and switch over to the <strong>JSON</strong> view.</li>
+        <li>Inject the localized scope block below (ensure to update <code>&lt;yourlastname&gt;</code>):</li>
+    </ol>
+<pre>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": "arn:aws:s3:::cldcomp-interim-&lt;yourlastname&gt;/uploads/*"
+    }
+  ]
+}</pre>
+    <ol start="5">
+        <li>Advance via <strong>Next</strong>, give the policy a descriptive name of <code>s3-access-policy</code>, and finalize by selecting <strong>Create policy</strong>.</li>
+    </ol>
+    <div class="callout">
+        <strong>Important Note:</strong> This template provides read capabilities exclusively. This constraint is deliberate; you are expected to update this policy during debugging.
+    </div>
+
+    <h3>Step 6: Add S3 Bucket Trigger Link</h3>
+    <p>Establish a native integration binding within your Lambda function workspace:</p>
+    <ul>
+        <li><strong>Source Component:</strong> S3 Bucket</li>
+        <li><strong>Target Bucket:</strong> Select your specific <code>cldcomp-interim-&lt;yourlastname&gt;</code> bucket</li>
+        <li><strong>Event Type:</strong> All object create events (<code>s3:ObjectCreated:*</code>)</li>
+        <li><strong>Prefix Filter:</strong> <code>uploads/</code></li>
+        <li><strong>Suffix Filter:</strong> <code>.csv</code></li>
+    </ul>
+
+    <h3>Step 7: Execute First System Test Run</h3>
+    <ol>
+        <li>Download the dataset template: <code style="color:#f8fafc; background:#1e293b;">https://raw.githubusercontent.com/johnwilben/CLDCOMP/main/sales.csv</code></li>
+        <li>Upload <code>sales.csv</code> into the <code>uploads/</code> directory inside your S3 bucket.</li>
+        <li>Allow 10&ndash;15 seconds for processing pipelines to clear.</li>
+        <li>Refresh your web dashboard application. Check whether data has hydrated the summary table elements. If it continues to display a loading state, continue to Step 8.</li>
+    </ol>
+
+    <h2>Step 8: System Debugging Protocol</h2>
+    <p>Your production pipeline contains <strong>3 discrete logic and permission bugs</strong>. Open up CloudWatch Logs to find traces and solve the problems.</p>
+    <p><strong>Log Group Location:</strong> CloudWatch &rarr; Log groups &rarr; <code>/aws/lambda/cldcomp-interim-&lt;yourlastname&gt;-processor</code></p>
+    
+    <h3>Debugging Clues:</h3>
+    <ul>
+        <li><strong>Bug 1 (IAM Exception):</strong> Scan log files for an <code>AccessDenied</code> statement. While the function reads successfully from the bucket, it is failing at a secondary interaction. Rectify the inline IAM policy configuration without assigning unsafe universal privileges. Do <strong>not</strong> grant <code>S3FullAccess</code>.</li>
+        <li><strong>Bug 2 (Key Mapping Exception):</strong> Look for a <code>KeyError</code> crash dump within the log outputs. The Python pipeline addresses a data column handle that deviates from the structured headers in the source <code>sales.csv</code> spreadsheet. Isolate and synchronize the column keys.</li>
+        <li><strong>Bug 3 (Output Desynchronization):</strong> CloudWatch shows successful completion traces with zero runtime exceptions, yet the web dashboard remains empty. The parsing script commits the structural output back into the bucket but introduces a filename variation differing from what the dashboard scripts look for.</li>
+    </ul>
+    
+    <div class="callout">
+        <strong>Workflow Note:</strong> For adjustments inside your Lambda text editor, click <strong>Deploy</strong> before re-uploading the <code>sales.csv</code> payload. For identity structure adjustments in IAM, simply upload the CSV file again to trigger execution.
+    </div>
+
+    <h2>Step 9: Success Validation Checklist</h2>
+    <p>Your solution is complete when:</p>
+    <ul>
+        <li>The compiled report <code>data/results.json</code> appears inside your storage bucket.</li>
+        <li>The web interface loads metrics reflecting correct aggregate values and item tracking datasets.</li>
+    </ul>
+
+    <h2>Step 10: Run the Assessment Verification Checker Script</h2>
+    <p><strong>Command 1 (Download):</strong></p>
+    <pre>curl -sL -H "Accept: application/vnd.github.v3.raw" "https://api.github.com/repos/johnwilben/CLDCOMP/contents/interim-checker.sh" -o interim-checker.sh</pre>
+    <p><strong>Command 2 (Execute):</strong></p>
+    <pre>bash interim-checker.sh</pre>
+    
+    <h3>CloudShell Instructions for Students:</h3>
+    <ol>
+        <li>Switch your active AWS Web Management Console region target to <strong>US East (N. Virginia)</strong>.</li>
+        <li>Initialize an instance of <strong>AWS CloudShell</strong> by selecting its global icon in the utility bar.</li>
+        <li>Paste and run <strong>Command 1</strong>, then hit Enter.</li>
+        <li>Paste and run <strong>Command 2</strong>, then hit Enter.</li>
+        <li>Type your exact <code>lastname</code> value when prompted by the script framework.</li>
+        <li>Take a full screenshot of the resulting success report text outputs.</li>
+    </ol>
+
+    <h2>Step 11: Submission Requirements</h2>
+    <p>Submit clear images for assessment evaluation:</p>
+    <ul>
+        <li>Screenshot proof capturing your live, working web dashboard window (with your full name and valid table records visible).</li>
+        <li>Screenshot image capture recording the terminal outputs produced by the verification script.</li>
+    </ul>
+    <p><em>In the event that the automated validation engine is unavailable, capture and provide the following 5 target screenshots:</em></p>
+    <ol>
+        <li><strong>S3 Storage:</strong> Displays bucket names alongside active listings showing <code>uploads/</code> and <code>data/results.json</code> paths.</li>
+        <li><strong>Static Interface:</strong> Browser window proving a working dashboard with student naming references alongside calculated numerical results.</li>
+        <li><strong>Lambda State:</strong> Shows your processor configuration displaying an active binding attachment to the S3 bucket trigger.</li>
+        <li><strong>IAM Identity View:</strong> Displays the inline policy JSON document proving narrow scope adherence (confirming <code>S3FullAccess</code> was not used).</li>
+        <li><strong>CloudWatch Logs:</strong> Code tracing streams confirming clean operational passes free from application execution failures.</li>
+    </ol>
+
+    <h2 style="page-break-before: always;">Grading Metrics Blueprint (100 Points Total)</h2>
+    
+    <h3>Section 1: S3 Bucket Setup (15 pts)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%">Evaluation Target</th>
+                <th style="width: 10%">Points</th>
+                <th style="width: 35%">Pass Criteria</th>
+                <th style="width: 25%">Fail Criteria</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Bucket Provisioning</td>
+                <td>5</td>
+                <td>Verified bucket <code>cldcomp-interim-&lt;lastname&gt;</code> exists</td>
+                <td>Not found = 0 pts</td>
+            </tr>
+            <tr>
+                <td>Naming Structure Compliance</td>
+                <td>5</td>
+                <td>Perfect implementation match of mandatory prefix formatting</td>
+                <td>Incorrect namespace = 0 pts</td>
+            </tr>
+            <tr>
+                <td>Web Application Server Hosting</td>
+                <td>5</td>
+                <td>Static web hosting operational context enabled</td>
+                <td>Feature inactive = 0 pts</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Section 2: Static Website Configuration (15 pts)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%">Evaluation Target</th>
+                <th style="width: 10%">Points</th>
+                <th style="width: 35%">Pass Criteria</th>
+                <th style="width: 25%">Fail Criteria</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Document Initialization</td>
+                <td>5</td>
+                <td>Valid <code>index.html</code> resource identified within bucket root context</td>
+                <td>Missing file = 0 pts</td>
+            </tr>
+            <tr>
+                <td>Application Web Reachability</td>
+                <td>5</td>
+                <td>Target hosting address interface yields absolute HTTP 200 responses</td>
+                <td>Unreachable / Access Denied = 0 pts</td>
+            </tr>
+            <tr>
+                <td>Individual Identity Marking</td>
+                <td>5</td>
+                <td>Student identity strings match documentation layouts on page</td>
+                <td>Missing or default placeholder text = 0 pts</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Section 3: Lambda Engine Setup (15 pts)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%">Evaluation Target</th>
+                <th style="width: 10%">Points</th>
+                <th style="width: 35%">Pass Criteria</th>
+                <th style="width: 25%">Fail Criteria</th>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td>Function Context Initialization</td>
+                <td>5</td>
+                <td>Processor function <code>cldcomp-interim-&lt;lastname&gt;-processor</code> exists</td>
+                <td>Not found = 0 pts</td>
+            </tr>
+            <tr>
+                <td>Runtime Specification Compliance</td>
+                <td>5</td>
+                <td>Active processing execution container targeted to <code>python3.x</code></td>
+                <td>Wrong runtime version = 0 pts</td>
+            </tr>
+            <tr>
+                <td>Handler Configuration Pathing</td>
+                <td>5</td>
+                <td>Target execution route targets <code>lambda_function.lambda_handler</code></td>
+                <td>Invalid mapping reference = 0 pts</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Section 4: S3 Interface Trigger Configuration (10 pts)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%">Evaluation Target</th>
+                <th style="width: 10%">Points</th>
+                <th style="width: 35%">Pass Criteria</th>
+                <th style="width: 25%">Fail Criteria</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Operational Pipeline Linkage</td>
+                <td>5</td>
+                <td>Lambda function maps to S3 event trigger on your bucket</td>
+                <td>No integration path found = 0 pts</td>
+            </tr>
+            <tr>
+                <td>Prefix Scope Filter Application</td>
+                <td>5</td>
+                <td>Event filters evaluate strictly against <code>uploads/</code> namespace</td>
+                <td>Incorrect scoping filters = 0 pts</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Section 5: Debugging Proficiency & Pipeline Execution (20 pts)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%">Evaluation Target</th>
+                <th style="width: 10%">Points</th>
+                <th style="width: 35%">Pass Criteria</th>
+                <th style="width: 25%">Fail Criteria</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Artifact Production Output</td>
+                <td>10</td>
+                <td>Valid <code>data/results.json</code> generated inside the storage target</td>
+                <td>Missing output resource = 0 pts</td>
+            </tr>
+            <tr>
+                <td>Output Schema Structural Health</td>
+                <td>10</td>
+                <td>Schema has fields <code>'total_sales'</code>, <code>'total_items'</code>, and <code>'records'</code></td>
+                <td>Malformed object keys = 0 pts</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Section 6: Dashboard Functional Integration (10 pts)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%">Evaluation Target</th>
+                <th style="width: 10%">Points</th>
+                <th style="width: 35%">Pass Criteria</th>
+                <th style="width: 25%">Fail Criteria</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Data Feed Public Reachability</td>
+                <td>5</td>
+                <td>Compiled file access permits web client extraction requests</td>
+                <td>Access Denied on object URL = 0 pts</td>
+            </tr>
+            <tr>
+                <td>Frontend Client Data Injection</td>
+                <td>5</td>
+                <td>Web markup framework imports and parses backend JSON datasets</td>
+                <td>Broken frontend references = 0 pts</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Section 7: IAM Security Profile & Privilege Scoping (15 pts)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%">Evaluation Target</th>
+                <th style="width: 10%">Points</th>
+                <th style="width: 35%">Pass Criteria</th>
+                <th style="width: 25%">Fail Criteria</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Least Privilege Policy Adherence</td>
+                <td>15</td>
+                <td>Inline policy limits access strictly to <code>s3:GetObject</code> + <code>s3:PutObject</code> on your bucket only</td>
+                <td>Automatic 0 points if blanket policies like <code>AmazonS3FullAccess</code> or <code>AdministratorAccess</code> are used</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="callout danger">
+        <strong>Critical Compliance Enforcement:</strong> Utilizing comprehensive administrative overrides (e.g., attaching <code>AmazonS3FullAccess</code> or general <code>AdministratorAccess</code> policies) results in an <strong>immediate automatic score of 0 / 15</strong> for the entire IAM Security section.
+    </div>
+
+    <h2>Time Management Reference</h2>
+    <ul>
+        <li><strong>Infrastructure Setup (S3 Bucket & Website hosting):</strong> ~20 minutes</li>
+        <li><strong>Compute Core Setup (Lambda Provisioning & S3 event triggering):</strong> ~20 minutes</li>
+        <li><strong>Active Log Investigation & Debugging Cycles:</strong> ~30 minutes</li>
+        <li><strong>Automated Assessment Runs & Submission Checks:</strong> ~20 minutes</li>
+    </ul>
+
+</body>
+</html>
