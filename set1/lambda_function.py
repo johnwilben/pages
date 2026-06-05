@@ -14,7 +14,7 @@ def lambda_handler(event, context):
     print(f"Processing file: {key} from bucket: {bucket}")
 
     # Simulate processing time
-    # BUG #1: This sleep causes the function to exceed the default 3-second timeout
+    # BUG #1: This is where the bug 1 is
     time.sleep(5)
 
     # Read the CSV file from S3
@@ -31,7 +31,7 @@ def lambda_handler(event, context):
 
     for row in reader:
         stock = int(row['stock'])
-        # BUG #2: Wrong column name - CSV has 'price' but code uses 'cost'
+        # BUG #2: 
         price = float(row['cost'])
 
         total_stock += stock
@@ -53,7 +53,7 @@ def lambda_handler(event, context):
         'items': items
     }
 
-    # BUG #3: Hardcoded wrong bucket name - should be the actual bucket from the event
+    # BUG #3: 
     output_bucket = 'finals-CHANGE-ME'
 
     s3.put_object(
