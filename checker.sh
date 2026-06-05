@@ -33,12 +33,28 @@ echo ""
 # ── 1. S3 Website (15 pts) ──
 echo "-- [15 pts] S3 Static Website --"
 WEBSITE_URL="http://${BUCKET}.s3-website-${REGION}.amazonaws.com"
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$WEBSITE_URL" 2>/dev/null)
+HTTP_CODE=$(curl -s -o /tmp/exam_page.html -w "%{http_code}" --max-time 10 "$WEBSITE_URL" 2>/dev/null)
 if [ "$HTTP_CODE" = "200" ]; then
   echo "  [PASS] Website loads (${WEBSITE_URL})"
   SCORE=$((SCORE + 15))
 else
   echo "  [FAIL] Website not accessible (HTTP $HTTP_CODE)"
+fi
+
+# ── 1b. Student Name on Website (10 pts) ──
+echo ""
+echo "-- [10 pts] Student Name on Dashboard --"
+if [ -f /tmp/exam_page.html ]; then
+  if grep -q "YOUR NAME HERE" /tmp/exam_page.html; then
+    echo "  [FAIL] Name not replaced (still shows YOUR NAME HERE)"
+  elif [ "$HTTP_CODE" = "200" ]; then
+    echo "  [PASS] Name replaced on dashboard"
+    SCORE=$((SCORE + 10))
+  else
+    echo "  [FAIL] Cannot check - website not loaded"
+  fi
+else
+  echo "  [FAIL] Cannot check - website not loaded"
 fi
 
 # ── 2. Bucket Policy (10 pts) ──
