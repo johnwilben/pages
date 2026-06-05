@@ -25,7 +25,7 @@ def lambda_handler(event, context):
     students = []
 
     for row in reader:
-        # BUG #2: Wrong column name - CSV has 'grade' but code uses 'score'
+        # BUG #2: THIS IS WHERE THE BUG 2
         grade = float(row['score'])
 
         total_grade += grade
@@ -49,7 +49,7 @@ def lambda_handler(event, context):
         'students': students
     }
 
-    # BUG #3: Wrong output path - website expects 'data/grades.json' but code writes 'data/results.json'
+    # BUG #3: THIS IS WHERE THE BUG 3
     output_key = 'data/results.json'
 
     s3.put_object(
